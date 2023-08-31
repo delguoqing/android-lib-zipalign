@@ -25,7 +25,7 @@ add_definitions(-DHAVE_SYS_SOCKET_H=1)
 endif(UNIX)
 
 if(APPLE)
-add_definitions(-Doff64_t=off_t)
+add_definitions(-Doff64_t=off_t)    # off_t is already 64bit on OSX
 add_definitions(-DHAVE_STRLCPY=1)
 endif(APPLE)
 
@@ -57,6 +57,12 @@ add_library(${PROJECT_NAME} STATIC ${SRC_LIST}
                ${SRC_NATIVE_UTILS}
                ${SRC_CORE_CUTILS}
               )
+
+add_executable(zipalign-bin 
+    main/ZipAlignMain.cpp)
+target_include_directories(zipalign-bin 
+    PRIVATE include)
+target_link_libraries(zipalign-bin ${PROJECT_NAME})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 install(FILES include/zipalign.h DESTINATION include)

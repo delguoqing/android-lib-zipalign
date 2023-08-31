@@ -18,7 +18,7 @@
  * Zip alignment tool
  */
 
-#include "ZipAlign.h"
+#include "zipalign.h"
 
 #include <getopt.h>
 #include <stdio.h>
