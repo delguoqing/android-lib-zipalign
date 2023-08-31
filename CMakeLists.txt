@@ -46,6 +46,7 @@ endif(MINGW)
 include_directories(android/core/include)
 include_directories(android/base/include)
 include_directories(android/native/include)
+include_directories(android/libziparchive/include)
 
 aux_source_directory(. SRC_LIST)
 aux_source_directory(zipalign SRC_ZIPALIGN)
@@ -59,10 +60,11 @@ add_library(${PROJECT_NAME} STATIC ${SRC_LIST}
               )
 
 add_executable(zipalign-bin 
-    main/ZipAlignMain.cpp)
+    main/ZipAlignMain.cpp
+    zipalign/ZipAlign.cpp)
 target_include_directories(zipalign-bin 
     PRIVATE include)
-target_link_libraries(zipalign-bin ${PROJECT_NAME})
+target_link_libraries(zipalign-bin ${PROJECT_NAME} z)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 install(FILES include/zipalign.h DESTINATION include)

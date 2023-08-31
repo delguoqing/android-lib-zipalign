@@ -35,4 +35,4 @@ extern int android_get_ioprio(int pid, IoSchedClass *clazz, int *ioprio);
 }
 #endif
 
-#endif /* __CUTILS_IOSCHED_POLICY_H */ 
+#endif /* __CUTILS_IOSCHED_POLICY_H */

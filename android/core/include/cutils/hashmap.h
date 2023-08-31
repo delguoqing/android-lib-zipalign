@@ -38,19 +38,19 @@ typedef struct Hashmap Hashmap;
  * @param hash function which hashes keys
  * @param equals function which compares keys for equality
  */
-Hashmap* hashmapCreate(size_t initialCapacity,
-        int (*hash)(void* key), bool (*equals)(void* keyA, void* keyB));
+Hashmap *hashmapCreate(size_t initialCapacity,
+                       int (*hash)(void *key), bool (*equals)(void *keyA, void *keyB));
 
 /**
  * Frees the hash map. Does not free the keys or values themselves.
  */
-void hashmapFree(Hashmap* map);
+void hashmapFree(Hashmap *map);
 
 /**
  * Hashes the memory pointed to by key with the given size. Useful for
  * implementing hash functions.
  */
-int hashmapHash(void* key, size_t keySize);
+int hashmapHash(void *key, size_t keySize);
 
 /**
  * Puts value for the given key in the map. Returns pre-existing value if
@@ -59,47 +59,47 @@ int hashmapHash(void* key, size_t keySize);
  * If memory allocation fails, this function returns NULL, the map's size
  * does not increase, and errno is set to ENOMEM.
  */
-void* hashmapPut(Hashmap* map, void* key, void* value);
+void *hashmapPut(Hashmap *map, void *key, void *value);
 
 /**
  * Gets a value from the map. Returns NULL if no entry for the given key is
  * found or if the value itself is NULL.
  */
-void* hashmapGet(Hashmap* map, void* key);
+void *hashmapGet(Hashmap *map, void *key);
 
 /**
  * Returns true if the map contains an entry for the given key.
  */
-bool hashmapContainsKey(Hashmap* map, void* key);
+bool hashmapContainsKey(Hashmap *map, void *key);
 
 /**
- * Gets the value for a key. If a value is not found, this function gets a 
+ * Gets the value for a key. If a value is not found, this function gets a
  * value and creates an entry using the given callback.
  *
  * If memory allocation fails, the callback is not called, this function
  * returns NULL, and errno is set to ENOMEM.
  */
-void* hashmapMemoize(Hashmap* map, void* key, 
-        void* (*initialValue)(void* key, void* context), void* context);
+void *hashmapMemoize(Hashmap *map, void *key,
+                     void *(*initialValue)(void *key, void *context), void *context);
 
 /**
  * Removes an entry from the map. Returns the removed value or NULL if no
  * entry was present.
  */
-void* hashmapRemove(Hashmap* map, void* key);
+void *hashmapRemove(Hashmap *map, void *key);
 
 /**
  * Gets the number of entries in this map.
  */
-size_t hashmapSize(Hashmap* map);
+size_t hashmapSize(Hashmap *map);
 
 /**
  * Invokes the given callback on each entry in the map. Stops iterating if
  * the callback returns false.
  */
-void hashmapForEach(Hashmap* map, 
-        bool (*callback)(void* key, void* value, void* context),
-        void* context);
+void hashmapForEach(Hashmap *map,
+                    bool (*callback)(void *key, void *value, void *context),
+                    void *context);
 
 /**
  * Concurrency support.
@@ -108,12 +108,12 @@ void hashmapForEach(Hashmap* map,
 /**
  * Locks the hash map so only the current thread can access it.
  */
-void hashmapLock(Hashmap* map);
+void hashmapLock(Hashmap *map);
 
 /**
  * Unlocks the hash map so other threads can access it.
  */
-void hashmapUnlock(Hashmap* map);
+void hashmapUnlock(Hashmap *map);
 
 /**
  * Key utilities.
@@ -122,12 +122,12 @@ void hashmapUnlock(Hashmap* map);
 /**
  * Hashes int keys. 'key' is a pointer to int.
  */
-int hashmapIntHash(void* key);
+int hashmapIntHash(void *key);
 
 /**
  * Compares two int keys for equality.
  */
-bool hashmapIntEquals(void* keyA, void* keyB);
+bool hashmapIntEquals(void *keyA, void *keyB);
 
 /**
  * For debugging.
@@ -136,15 +136,15 @@ bool hashmapIntEquals(void* keyA, void* keyB);
 /**
  * Gets current capacity.
  */
-size_t hashmapCurrentCapacity(Hashmap* map);
+size_t hashmapCurrentCapacity(Hashmap *map);
 
 /**
  * Counts the number of entry collisions.
  */
-size_t hashmapCountCollisions(Hashmap* map);
+size_t hashmapCountCollisions(Hashmap *map);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __HASHMAP_H */ 
+#endif /* __HASHMAP_H */

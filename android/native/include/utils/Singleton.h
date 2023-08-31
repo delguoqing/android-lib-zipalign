@@ -23,46 +23,45 @@
 #include <cutils/compiler.h>
 
 namespace android {
-// ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
 
-template <typename TYPE>
-class ANDROID_API Singleton
-{
-public:
-    static TYPE& getInstance() {
-        Mutex::Autolock _l(sLock);
-        TYPE* instance = sInstance;
-        if (instance == 0) {
-            instance = new TYPE();
-            sInstance = instance;
+    template <typename TYPE>
+    class ANDROID_API Singleton {
+    public:
+        static TYPE &getInstance() {
+            Mutex::Autolock _l(sLock);
+            TYPE *instance = sInstance;
+            if (instance == 0) {
+                instance = new TYPE();
+                sInstance = instance;
+            }
+            return *instance;
         }
-        return *instance;
-    }
 
-    static bool hasInstance() {
-        Mutex::Autolock _l(sLock);
-        return sInstance != 0;
-    }
-    
-protected:
-    ~Singleton() { };
-    Singleton() { };
+        static bool hasInstance() {
+            Mutex::Autolock _l(sLock);
+            return sInstance != 0;
+        }
 
-private:
-    Singleton(const Singleton&);
-    Singleton& operator = (const Singleton&);
-    static Mutex sLock;
-    static TYPE* sInstance;
-};
+    protected:
+        ~Singleton() { };
+        Singleton() { };
 
-/*
- * use ANDROID_SINGLETON_STATIC_INSTANCE(TYPE) in your implementation file
- * (eg: <TYPE>.cpp) to create the static instance of Singleton<>'s attributes,
- * and avoid to have a copy of them in each compilation units Singleton<TYPE>
- * is used.
- * NOTE: we use a version of Mutex ctor that takes a parameter, because
- * for some unknown reason using the default ctor doesn't emit the variable!
- */
+    private:
+        Singleton(const Singleton &);
+        Singleton &operator = (const Singleton &);
+        static Mutex sLock;
+        static TYPE *sInstance;
+    };
+
+    /*
+     * use ANDROID_SINGLETON_STATIC_INSTANCE(TYPE) in your implementation file
+     * (eg: <TYPE>.cpp) to create the static instance of Singleton<>'s attributes,
+     * and avoid to have a copy of them in each compilation units Singleton<TYPE>
+     * is used.
+     * NOTE: we use a version of Mutex ctor that takes a parameter, because
+     * for some unknown reason using the default ctor doesn't emit the variable!
+     */
 
 #define ANDROID_SINGLETON_STATIC_INSTANCE(TYPE)                 \
     template<> Mutex Singleton< TYPE >::sLock(Mutex::PRIVATE);  \
@@ -70,7 +69,7 @@ private:
     template class Singleton< TYPE >;
 
 
-// ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
 }; // namespace android
 
 #endif // ANDROID_UTILS_SINGLETON_H

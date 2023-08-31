@@ -207,15 +207,15 @@ typedef enum {
                                   AUDIO_CHANNEL_OUT_BACK_RIGHT |
                                   AUDIO_CHANNEL_OUT_FRONT_LEFT_OF_CENTER |
                                   AUDIO_CHANNEL_OUT_FRONT_RIGHT_OF_CENTER |
-                                  AUDIO_CHANNEL_OUT_BACK_CENTER|
-                                  AUDIO_CHANNEL_OUT_SIDE_LEFT|
-                                  AUDIO_CHANNEL_OUT_SIDE_RIGHT|
-                                  AUDIO_CHANNEL_OUT_TOP_CENTER|
-                                  AUDIO_CHANNEL_OUT_TOP_FRONT_LEFT|
-                                  AUDIO_CHANNEL_OUT_TOP_FRONT_CENTER|
-                                  AUDIO_CHANNEL_OUT_TOP_FRONT_RIGHT|
-                                  AUDIO_CHANNEL_OUT_TOP_BACK_LEFT|
-                                  AUDIO_CHANNEL_OUT_TOP_BACK_CENTER|
+                                  AUDIO_CHANNEL_OUT_BACK_CENTER |
+                                  AUDIO_CHANNEL_OUT_SIDE_LEFT |
+                                  AUDIO_CHANNEL_OUT_SIDE_RIGHT |
+                                  AUDIO_CHANNEL_OUT_TOP_CENTER |
+                                  AUDIO_CHANNEL_OUT_TOP_FRONT_LEFT |
+                                  AUDIO_CHANNEL_OUT_TOP_FRONT_CENTER |
+                                  AUDIO_CHANNEL_OUT_TOP_FRONT_RIGHT |
+                                  AUDIO_CHANNEL_OUT_TOP_BACK_LEFT |
+                                  AUDIO_CHANNEL_OUT_TOP_BACK_CENTER |
                                   AUDIO_CHANNEL_OUT_TOP_BACK_RIGHT),
 
     /* input channels */
@@ -239,11 +239,11 @@ typedef enum {
     AUDIO_CHANNEL_IN_ALL    = (AUDIO_CHANNEL_IN_LEFT |
                                AUDIO_CHANNEL_IN_RIGHT |
                                AUDIO_CHANNEL_IN_FRONT |
-                               AUDIO_CHANNEL_IN_BACK|
+                               AUDIO_CHANNEL_IN_BACK |
                                AUDIO_CHANNEL_IN_LEFT_PROCESSED |
                                AUDIO_CHANNEL_IN_RIGHT_PROCESSED |
                                AUDIO_CHANNEL_IN_FRONT_PROCESSED |
-                               AUDIO_CHANNEL_IN_BACK_PROCESSED|
+                               AUDIO_CHANNEL_IN_BACK_PROCESSED |
                                AUDIO_CHANNEL_IN_PRESSURE |
                                AUDIO_CHANNEL_IN_X_AXIS |
                                AUDIO_CHANNEL_IN_Y_AXIS |
@@ -333,57 +333,50 @@ typedef enum {
     AUDIO_DEVICE_IN_ALL_SCO = AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET,
 } audio_devices_t;
 
-static inline bool audio_is_output_device(audio_devices_t device)
-{
+static inline bool audio_is_output_device(audio_devices_t device) {
     if ((popcount(device) == 1) && ((device & ~AUDIO_DEVICE_OUT_ALL) == 0))
         return true;
     else
         return false;
 }
 
-static inline bool audio_is_input_device(audio_devices_t device)
-{
+static inline bool audio_is_input_device(audio_devices_t device) {
     if ((popcount(device) == 1) && ((device & ~AUDIO_DEVICE_IN_ALL) == 0))
         return true;
     else
         return false;
 }
 
-static inline bool audio_is_a2dp_device(audio_devices_t device)
-{
+static inline bool audio_is_a2dp_device(audio_devices_t device) {
     if ((popcount(device) == 1) && (device & AUDIO_DEVICE_OUT_ALL_A2DP))
         return true;
     else
         return false;
 }
 
-static inline bool audio_is_bluetooth_sco_device(audio_devices_t device)
-{
+static inline bool audio_is_bluetooth_sco_device(audio_devices_t device) {
     if ((popcount(device) == 1) && (device & (AUDIO_DEVICE_OUT_ALL_SCO |
-                   AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET)))
+                                    AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET)))
         return true;
     else
         return false;
 }
 
-static inline bool audio_is_input_channel(uint32_t channel)
-{
+static inline bool audio_is_input_channel(uint32_t channel) {
     if ((channel & ~AUDIO_CHANNEL_IN_ALL) == 0)
         return true;
     else
         return false;
 }
 
-static inline bool audio_is_output_channel(uint32_t channel)
-{
+static inline bool audio_is_output_channel(uint32_t channel) {
     if ((channel & ~AUDIO_CHANNEL_OUT_ALL) == 0)
         return true;
     else
         return false;
 }
 
-static inline bool audio_is_valid_format(uint32_t format)
-{
+static inline bool audio_is_valid_format(uint32_t format) {
     switch (format & AUDIO_FORMAT_MAIN_MASK) {
     case AUDIO_FORMAT_PCM:
         if (format != AUDIO_FORMAT_PCM_16_BIT &&
@@ -403,28 +396,26 @@ static inline bool audio_is_valid_format(uint32_t format)
     }
 }
 
-static inline bool audio_is_linear_pcm(uint32_t format)
-{
+static inline bool audio_is_linear_pcm(uint32_t format) {
     return ((format & AUDIO_FORMAT_MAIN_MASK) == AUDIO_FORMAT_PCM);
 }
 
-static inline size_t audio_bytes_per_sample(uint32_t format)
-{
+static inline size_t audio_bytes_per_sample(uint32_t format) {
     size_t size = 0;
 
     switch (format) {
-        case AUDIO_FORMAT_PCM_32_BIT:
-        case AUDIO_FORMAT_PCM_8_24_BIT:
-            size = sizeof(int32_t);
-            break;
-        case AUDIO_FORMAT_PCM_16_BIT:
-            size = sizeof(int16_t);
-            break;
-        case AUDIO_FORMAT_PCM_8_BIT:
-            size = sizeof(uint8_t);
-            break;
-        default:
-            break;
+    case AUDIO_FORMAT_PCM_32_BIT:
+    case AUDIO_FORMAT_PCM_8_24_BIT:
+        size = sizeof(int32_t);
+        break;
+    case AUDIO_FORMAT_PCM_16_BIT:
+        size = sizeof(int16_t);
+        break;
+    case AUDIO_FORMAT_PCM_8_BIT:
+        size = sizeof(uint8_t);
+        break;
+    default:
+        break;
     }
     return size;
 }

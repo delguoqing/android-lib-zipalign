@@ -30,13 +30,13 @@ extern "C" {
  *
  * Warning: This leaks a string every time you call it. Use judiciously!
  */
-void set_process_name(const char* process_name);
+void set_process_name(const char *process_name);
 
 /** Gets the current process name. */
-const char* get_process_name(void);
+const char *get_process_name(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __PROCESS_NAME_H */ 
+#endif /* __PROCESS_NAME_H */

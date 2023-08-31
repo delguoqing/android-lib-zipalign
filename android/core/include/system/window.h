@@ -37,12 +37,11 @@ __BEGIN_DECLS
 
 // ---------------------------------------------------------------------------
 
-typedef const native_handle_t* buffer_handle_t;
+typedef const native_handle_t *buffer_handle_t;
 
 // ---------------------------------------------------------------------------
 
-typedef struct android_native_rect_t
-{
+typedef struct android_native_rect_t {
     int32_t left;
     int32_t top;
     int32_t right;
@@ -51,23 +50,21 @@ typedef struct android_native_rect_t
 
 // ---------------------------------------------------------------------------
 
-typedef struct android_native_base_t
-{
+typedef struct android_native_base_t {
     /* a magic value defined by the actual EGL native type */
     int magic;
 
     /* the sizeof() of the actual EGL native type */
     int version;
 
-    void* reserved[4];
+    void *reserved[4];
 
     /* reference-counting interface */
-    void (*incRef)(struct android_native_base_t* base);
-    void (*decRef)(struct android_native_base_t* base);
+    void (*incRef)(struct android_native_base_t *base);
+    void (*decRef)(struct android_native_base_t *base);
 } android_native_base_t;
 
-typedef struct ANativeWindowBuffer
-{
+typedef struct ANativeWindowBuffer {
 #ifdef __cplusplus
     ANativeWindowBuffer() {
         common.magic = ANDROID_NATIVE_BUFFER_MAGIC;
@@ -77,11 +74,11 @@ typedef struct ANativeWindowBuffer
 
     // Implement the methods that sp<ANativeWindowBuffer> expects so that it
     // can be used to automatically refcount ANativeWindowBuffer's.
-    void incStrong(const void* id) const {
-        common.incRef(const_cast<android_native_base_t*>(&common));
+    void incStrong(const void *id) const {
+        common.incRef(const_cast<android_native_base_t *>(&common));
     }
-    void decStrong(const void* id) const {
-        common.decRef(const_cast<android_native_base_t*>(&common));
+    void decStrong(const void *id) const {
+        common.decRef(const_cast<android_native_base_t *>(&common));
     }
 #endif
 
@@ -93,11 +90,11 @@ typedef struct ANativeWindowBuffer
     int format;
     int usage;
 
-    void* reserved[2];
+    void *reserved[2];
 
     buffer_handle_t handle;
 
-    void* reserved_proc[8];
+    void *reserved_proc[8];
 } ANativeWindowBuffer_t;
 
 // Old typedef for backwards compatibility.
@@ -290,14 +287,12 @@ enum {
  * by the native window when queueBuffer is called.  This is equal to INT64_MIN,
  * defined directly to avoid problems with C99/C++ inclusion of stdint.h.
  */
-static const int64_t NATIVE_WINDOW_TIMESTAMP_AUTO = (-9223372036854775807LL-1);
+static const int64_t NATIVE_WINDOW_TIMESTAMP_AUTO = (-9223372036854775807LL - 1);
 
-struct ANativeWindow
-{
+struct ANativeWindow {
 #ifdef __cplusplus
     ANativeWindow()
-        : flags(0), minSwapInterval(0), maxSwapInterval(0), xdpi(0), ydpi(0)
-    {
+        : flags(0), minSwapInterval(0), maxSwapInterval(0), xdpi(0), ydpi(0) {
         common.magic = ANDROID_NATIVE_WINDOW_MAGIC;
         common.version = sizeof(ANativeWindow);
         memset(common.reserved, 0, sizeof(common.reserved));
@@ -305,11 +300,11 @@ struct ANativeWindow
 
     /* Implement the methods that sp<ANativeWindow> expects so that it
        can be used to automatically refcount ANativeWindow's. */
-    void incStrong(const void* id) const {
-        common.incRef(const_cast<android_native_base_t*>(&common));
+    void incStrong(const void *id) const {
+        common.incRef(const_cast<android_native_base_t *>(&common));
     }
-    void decStrong(const void* id) const {
-        common.decRef(const_cast<android_native_base_t*>(&common));
+    void decStrong(const void *id) const {
+        common.decRef(const_cast<android_native_base_t *>(&common));
     }
 #endif
 
@@ -336,8 +331,8 @@ struct ANativeWindow
      *
      * Returns 0 on success or -errno on error.
      */
-    int     (*setSwapInterval)(struct ANativeWindow* window,
-                int interval);
+    int     (*setSwapInterval)(struct ANativeWindow *window,
+                               int interval);
 
     /*
      * Hook called by EGL to acquire a buffer. After this call, the buffer
@@ -352,8 +347,8 @@ struct ANativeWindow
      *
      * Returns 0 on success or -errno on error.
      */
-    int     (*dequeueBuffer)(struct ANativeWindow* window,
-                struct ANativeWindowBuffer** buffer);
+    int     (*dequeueBuffer)(struct ANativeWindow *window,
+                             struct ANativeWindowBuffer **buffer);
 
     /*
      * hook called by EGL to lock a buffer. This MUST be called before modifying
@@ -362,8 +357,8 @@ struct ANativeWindow
      *
      * Returns 0 on success or -errno on error.
      */
-    int     (*lockBuffer)(struct ANativeWindow* window,
-                struct ANativeWindowBuffer* buffer);
+    int     (*lockBuffer)(struct ANativeWindow *window,
+                          struct ANativeWindowBuffer *buffer);
     /*
      * Hook called by EGL when modifications to the render buffer are done.
      * This unlocks and post the buffer.
@@ -378,16 +373,16 @@ struct ANativeWindow
      *
      * Returns 0 on success or -errno on error.
      */
-    int     (*queueBuffer)(struct ANativeWindow* window,
-                struct ANativeWindowBuffer* buffer);
+    int     (*queueBuffer)(struct ANativeWindow *window,
+                           struct ANativeWindowBuffer *buffer);
 
     /*
      * hook used to retrieve information about the native window.
      *
      * Returns 0 on success or -errno on error.
      */
-    int     (*query)(const struct ANativeWindow* window,
-                int what, int* value);
+    int     (*query)(const struct ANativeWindow *window,
+                     int what, int *value);
 
     /*
      * hook used to perform various operations on the surface.
@@ -419,8 +414,8 @@ struct ANativeWindow
      *
      */
 
-    int     (*perform)(struct ANativeWindow* window,
-                int operation, ... );
+    int     (*perform)(struct ANativeWindow *window,
+                       int operation, ... );
 
     /*
      * Hook used to cancel a buffer that has been dequeued.
@@ -434,16 +429,16 @@ struct ANativeWindow
      * Holding a reference to a buffer after queueing or canceling it is only
      * allowed if a specific buffer count has been set.
      */
-    int     (*cancelBuffer)(struct ANativeWindow* window,
-                struct ANativeWindowBuffer* buffer);
+    int     (*cancelBuffer)(struct ANativeWindow *window,
+                            struct ANativeWindowBuffer *buffer);
 
 
-    void* reserved_proc[2];
+    void *reserved_proc[2];
 };
 
- /* Backwards compatibility: use ANativeWindow (struct ANativeWindow in C).
-  * android_native_window_t is deprecated.
-  */
+/* Backwards compatibility: use ANativeWindow (struct ANativeWindow in C).
+ * android_native_window_t is deprecated.
+ */
 typedef struct ANativeWindow ANativeWindow;
 typedef struct ANativeWindow android_native_window_t;
 
@@ -459,20 +454,19 @@ typedef struct ANativeWindow android_native_window_t;
  */
 
 static inline int native_window_set_usage(
-        struct ANativeWindow* window, int usage)
-{
+    struct ANativeWindow *window, int usage) {
     return window->perform(window, NATIVE_WINDOW_SET_USAGE, usage);
 }
 
 /* deprecated. Always returns 0. Don't call. */
 static inline int native_window_connect(
-        struct ANativeWindow* window, int api) {
+    struct ANativeWindow *window, int api) {
     return 0;
 }
 
 /* deprecated. Always returns 0. Don't call. */
 static inline int native_window_disconnect(
-        struct ANativeWindow* window, int api) {
+    struct ANativeWindow *window, int api) {
     return 0;
 }
 
@@ -489,9 +483,8 @@ static inline int native_window_disconnect(
  * out of the buffer's bound or if the window is invalid.
  */
 static inline int native_window_set_crop(
-        struct ANativeWindow* window,
-        android_native_rect_t const * crop)
-{
+    struct ANativeWindow *window,
+    android_native_rect_t const *crop) {
     return window->perform(window, NATIVE_WINDOW_SET_CROP, crop);
 }
 
@@ -500,9 +493,8 @@ static inline int native_window_set_crop(
  * Sets the number of buffers associated with this native window.
  */
 static inline int native_window_set_buffer_count(
-        struct ANativeWindow* window,
-        size_t bufferCount)
-{
+    struct ANativeWindow *window,
+    size_t bufferCount) {
     return window->perform(window, NATIVE_WINDOW_SET_BUFFER_COUNT, bufferCount);
 }
 
@@ -516,11 +508,10 @@ static inline int native_window_set_buffer_count(
  * and native_window_set_buffers_format functions should be used instead.
  */
 static inline int native_window_set_buffers_geometry(
-        struct ANativeWindow* window,
-        int w, int h, int format)
-{
+    struct ANativeWindow *window,
+    int w, int h, int format) {
     return window->perform(window, NATIVE_WINDOW_SET_BUFFERS_GEOMETRY,
-            w, h, format);
+                           w, h, format);
 }
 
 /*
@@ -537,11 +528,10 @@ static inline int native_window_set_buffers_geometry(
  * disables cropping of the buffers.
  */
 static inline int native_window_set_buffers_dimensions(
-        struct ANativeWindow* window,
-        int w, int h)
-{
+    struct ANativeWindow *window,
+    int w, int h) {
     return window->perform(window, NATIVE_WINDOW_SET_BUFFERS_DIMENSIONS,
-            w, h);
+                           w, h);
 }
 
 /*
@@ -551,9 +541,8 @@ static inline int native_window_set_buffers_dimensions(
  * If the specified format is 0, the default buffer format will be used.
  */
 static inline int native_window_set_buffers_format(
-        struct ANativeWindow* window,
-        int format)
-{
+    struct ANativeWindow *window,
+    int format) {
     return window->perform(window, NATIVE_WINDOW_SET_BUFFERS_FORMAT, format);
 }
 
@@ -563,11 +552,10 @@ static inline int native_window_set_buffers_format(
  * to the transform parameter specified.
  */
 static inline int native_window_set_buffers_transform(
-        struct ANativeWindow* window,
-        int transform)
-{
+    struct ANativeWindow *window,
+    int transform) {
     return window->perform(window, NATIVE_WINDOW_SET_BUFFERS_TRANSFORM,
-            transform);
+                           transform);
 }
 
 /*
@@ -581,11 +569,10 @@ static inline int native_window_set_buffers_transform(
  * reset when the position is set.
  */
 static inline int native_window_set_buffers_timestamp(
-        struct ANativeWindow* window,
-        int64_t timestamp)
-{
+    struct ANativeWindow *window,
+    int64_t timestamp) {
     return window->perform(window, NATIVE_WINDOW_SET_BUFFERS_TIMESTAMP,
-            timestamp);
+                           timestamp);
 }
 
 /*
@@ -594,11 +581,10 @@ static inline int native_window_set_buffers_timestamp(
  * specified.
  */
 static inline int native_window_set_scaling_mode(
-        struct ANativeWindow* window,
-        int mode)
-{
+    struct ANativeWindow *window,
+    int mode) {
     return window->perform(window, NATIVE_WINDOW_SET_SCALING_MODE,
-            mode);
+                           mode);
 }
 
 
@@ -609,8 +595,7 @@ static inline int native_window_set_scaling_mode(
  * can happen if it's connected to some other API.
  */
 static inline int native_window_api_connect(
-        struct ANativeWindow* window, int api)
-{
+    struct ANativeWindow *window, int api) {
     return window->perform(window, NATIVE_WINDOW_API_CONNECT, api);
 }
 
@@ -621,8 +606,7 @@ static inline int native_window_api_connect(
  * first place.
  */
 static inline int native_window_api_disconnect(
-        struct ANativeWindow* window, int api)
-{
+    struct ANativeWindow *window, int api) {
     return window->perform(window, NATIVE_WINDOW_API_DISCONNECT, api);
 }
 

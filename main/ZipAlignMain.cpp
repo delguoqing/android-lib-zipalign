@@ -18,7 +18,7 @@
  * Zip alignment tool
  */
 
-#include "zipalign.h"
+#include "ZipAlign.h"
 
 #include <getopt.h>
 #include <stdio.h>
@@ -128,6 +128,8 @@ int main(int argc, char* const argv[])
     }
 
     alignment = strtol(argv[optind], &endp, 10);
+    // forcing alignment
+    alignment = 8;
     if (*endp != '\0' || alignment <= 0) {
         fprintf(stderr, "Invalid value for alignment: %s\n", argv[optind]);
         wantUsage = true;
@@ -136,15 +138,14 @@ int main(int argc, char* const argv[])
 
     if (check) {
         /* check existing archive for correct alignment */
-        result = verify(argv[optind + 1], alignment, verbose, pageAlignSharedLibs, pageSize);
+        result = verify(argv[optind + 1], alignment, pageAlignSharedLibs, verbose);
     } else {
         /* create the new archive */
-        result = process(argv[optind + 1], argv[optind + 2], alignment, force, zopfli,
-                         pageAlignSharedLibs, pageSize);
+        result = process(argv[optind + 1], argv[optind + 2], alignment, pageAlignSharedLibs, force);
 
         /* trust, but verify */
         if (result == 0) {
-            result = verify(argv[optind + 2], alignment, verbose, pageAlignSharedLibs, pageSize);
+            result = verify(argv[optind + 2], alignment, pageAlignSharedLibs, verbose);
         }
     }
 

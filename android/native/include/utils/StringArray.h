@@ -16,7 +16,7 @@
 
 //
 // Sortable array of strings.  STL-ish, but STL-free.
-//  
+//
 #ifndef _LIBS_UTILS_STRING_ARRAY_H
 #define _LIBS_UTILS_STRING_ARRAY_H
 
@@ -25,58 +25,60 @@
 
 namespace android {
 
-//
-// An expanding array of strings.  Add, get, sort, delete.
-//
-class StringArray {
-public:
-    StringArray();
-    virtual ~StringArray();
+    //
+    // An expanding array of strings.  Add, get, sort, delete.
+    //
+    class StringArray {
+    public:
+        StringArray();
+        virtual ~StringArray();
 
-    //
-    // Add a string.  A copy of the string is made.
-    //
-    bool push_back(const char* str);
+        //
+        // Add a string.  A copy of the string is made.
+        //
+        bool push_back(const char *str);
 
-    //
-    // Delete an entry.
-    //
-    void erase(int idx);
+        //
+        // Delete an entry.
+        //
+        void erase(int idx);
 
-    //
-    // Sort the array.
-    //
-    void sort(int (*compare)(const void*, const void*));
-    
-    //
-    // Pass this to the sort routine to do an ascending alphabetical sort.
-    //
-    static int cmpAscendingAlpha(const void* pstr1, const void* pstr2);
-    
-    //
-    // Get the #of items in the array.
-    //
-    inline int size(void) const { return mCurrent; }
+        //
+        // Sort the array.
+        //
+        void sort(int (*compare)(const void *, const void *));
 
-    //
-    // Return entry N.
-    // [should use operator[] here]
-    //
-    const char* getEntry(int idx) const {
-        return (unsigned(idx) >= unsigned(mCurrent)) ? NULL : mArray[idx];
-    }
+        //
+        // Pass this to the sort routine to do an ascending alphabetical sort.
+        //
+        static int cmpAscendingAlpha(const void *pstr1, const void *pstr2);
 
-    //
-    // Set entry N to specified string.
-    // [should use operator[] here]
-    //
-    void setEntry(int idx, const char* str);
+        //
+        // Get the #of items in the array.
+        //
+        inline int size(void) const {
+            return mCurrent;
+        }
 
-private:
-    int     mMax;
-    int     mCurrent;
-    char**  mArray;
-};
+        //
+        // Return entry N.
+        // [should use operator[] here]
+        //
+        const char *getEntry(int idx) const {
+            return (unsigned(idx) >= unsigned(mCurrent)) ? NULL : mArray[idx];
+        }
+
+        //
+        // Set entry N to specified string.
+        // [should use operator[] here]
+        //
+        void setEntry(int idx, const char *str);
+
+    private:
+        int     mMax;
+        int     mCurrent;
+        char  **mArray;
+    };
 
 }; // namespace android
 

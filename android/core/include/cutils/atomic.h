@@ -65,11 +65,11 @@ extern "C" {
  * These have the same characteristics (e.g. what happens on overflow)
  * as the equivalent non-atomic C operations.
  */
-int32_t android_atomic_inc(volatile int32_t* addr);
-int32_t android_atomic_dec(volatile int32_t* addr);
-int32_t android_atomic_add(int32_t value, volatile int32_t* addr);
-int32_t android_atomic_and(int32_t value, volatile int32_t* addr);
-int32_t android_atomic_or(int32_t value, volatile int32_t* addr);
+int32_t android_atomic_inc(volatile int32_t *addr);
+int32_t android_atomic_dec(volatile int32_t *addr);
+int32_t android_atomic_add(int32_t value, volatile int32_t *addr);
+int32_t android_atomic_and(int32_t value, volatile int32_t *addr);
+int32_t android_atomic_or(int32_t value, volatile int32_t *addr);
 
 /*
  * Perform an atomic load with "acquire" or "release" ordering.
@@ -77,8 +77,8 @@ int32_t android_atomic_or(int32_t value, volatile int32_t* addr);
  * This is only necessary if you need the memory barrier.  A 32-bit read
  * from a 32-bit aligned address is atomic on all supported platforms.
  */
-int32_t android_atomic_acquire_load(volatile const int32_t* addr);
-int32_t android_atomic_release_load(volatile const int32_t* addr);
+int32_t android_atomic_acquire_load(volatile const int32_t *addr);
+int32_t android_atomic_release_load(volatile const int32_t *addr);
 
 /*
  * Perform an atomic store with "acquire" or "release" ordering.
@@ -86,8 +86,8 @@ int32_t android_atomic_release_load(volatile const int32_t* addr);
  * This is only necessary if you need the memory barrier.  A 32-bit write
  * to a 32-bit aligned address is atomic on all supported platforms.
  */
-void android_atomic_acquire_store(int32_t value, volatile int32_t* addr);
-void android_atomic_release_store(int32_t value, volatile int32_t* addr);
+void android_atomic_acquire_store(int32_t value, volatile int32_t *addr);
+void android_atomic_release_store(int32_t value, volatile int32_t *addr);
 
 /*
  * Compare-and-set operation with "acquire" or "release" ordering.
@@ -102,9 +102,9 @@ void android_atomic_release_store(int32_t value, volatile int32_t* addr);
  * than possible, because we re-issue the memory barrier on each iteration.
  */
 int android_atomic_acquire_cas(int32_t oldvalue, int32_t newvalue,
-        volatile int32_t* addr);
+                               volatile int32_t *addr);
 int android_atomic_release_cas(int32_t oldvalue, int32_t newvalue,
-        volatile int32_t* addr);
+                               volatile int32_t *addr);
 
 /*
  * Aliases for code using an older version of this header.  These are now

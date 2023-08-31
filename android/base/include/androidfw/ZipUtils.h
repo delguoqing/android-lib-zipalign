@@ -24,43 +24,43 @@
 
 namespace android {
 
-/*
- * Container class for utility functions, primarily for namespace reasons.
- */
-class ZipUtils {
-public:
     /*
-     * General utility function for uncompressing "deflate" data from a file
-     * to a buffer.
+     * Container class for utility functions, primarily for namespace reasons.
      */
-    static bool inflateToBuffer(int fd, void* buf, long uncompressedLen,
-        long compressedLen);
-    static bool inflateToBuffer(FILE* fp, void* buf, long uncompressedLen,
-        long compressedLen);
+    class ZipUtils {
+    public:
+        /*
+         * General utility function for uncompressing "deflate" data from a file
+         * to a buffer.
+         */
+        static bool inflateToBuffer(int fd, void *buf, long uncompressedLen,
+                                    long compressedLen);
+        static bool inflateToBuffer(FILE *fp, void *buf, long uncompressedLen,
+                                    long compressedLen);
 
-    /*
-     * Someday we might want to make this generic and handle bzip2 ".bz2"
-     * files too.
-     *
-     * We could declare gzip to be a sub-class of zip that has exactly
-     * one always-compressed entry, but we currently want to treat Zip
-     * and gzip as distinct, so there's no value.
-     *
-     * The zlib library has some gzip utilities, but it has no interface
-     * for extracting the uncompressed length of the file (you do *not*
-     * want to gzseek to the end).
-     *
-     * Pass in a seeked file pointer for the gzip file.  If this is a gzip
-     * file, we set our return values appropriately and return "true" with
-     * the file seeked to the start of the compressed data.
-     */
-    static bool examineGzip(FILE* fp, int* pCompressionMethod,
-        long* pUncompressedLen, long* pCompressedLen, unsigned long* pCRC32);
+        /*
+         * Someday we might want to make this generic and handle bzip2 ".bz2"
+         * files too.
+         *
+         * We could declare gzip to be a sub-class of zip that has exactly
+         * one always-compressed entry, but we currently want to treat Zip
+         * and gzip as distinct, so there's no value.
+         *
+         * The zlib library has some gzip utilities, but it has no interface
+         * for extracting the uncompressed length of the file (you do *not*
+         * want to gzseek to the end).
+         *
+         * Pass in a seeked file pointer for the gzip file.  If this is a gzip
+         * file, we set our return values appropriately and return "true" with
+         * the file seeked to the start of the compressed data.
+         */
+        static bool examineGzip(FILE *fp, int *pCompressionMethod,
+                                long *pUncompressedLen, long *pCompressedLen, unsigned long *pCRC32);
 
-private:
-    ZipUtils() {}
-    ~ZipUtils() {}
-};
+    private:
+        ZipUtils() {}
+        ~ZipUtils() {}
+    };
 
 }; // namespace android
 

@@ -21,7 +21,7 @@ void klog_init(void);
 void klog_set_level(int level);
 void klog_close(void);
 void klog_write(int level, const char *fmt, ...)
-    __attribute__ ((format(printf, 2, 3)));
+__attribute__ ((format(printf, 2, 3)));
 
 #define KLOG_ERROR(tag,x...)   klog_write(3, "<3>" tag ": " x)
 #define KLOG_WARNING(tag,x...) klog_write(4, "<4>" tag ": " x)

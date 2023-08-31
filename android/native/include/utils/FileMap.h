@@ -30,106 +30,117 @@
 
 namespace android {
 
-/*
- * This represents a memory-mapped file.  It might be the entire file or
- * only part of it.  This requires a little bookkeeping because the mapping
- * needs to be aligned on page boundaries, and in some cases we'd like to
- * have multiple references to the mapped area without creating additional
- * maps.
- *
- * This always uses MAP_SHARED.
- *
- * TODO: we should be able to create a new FileMap that is a subset of
- * an existing FileMap and shares the underlying mapped pages.  Requires
- * completing the refcounting stuff and possibly introducing the notion
- * of a FileMap hierarchy.
- */
-class FileMap {
-public:
-    FileMap(void);
-
     /*
-     * Create a new mapping on an open file.
+     * This represents a memory-mapped file.  It might be the entire file or
+     * only part of it.  This requires a little bookkeeping because the mapping
+     * needs to be aligned on page boundaries, and in some cases we'd like to
+     * have multiple references to the mapped area without creating additional
+     * maps.
      *
-     * Closing the file descriptor does not unmap the pages, so we don't
-     * claim ownership of the fd.
+     * This always uses MAP_SHARED.
      *
-     * Returns "false" on failure.
+     * TODO: we should be able to create a new FileMap that is a subset of
+     * an existing FileMap and shares the underlying mapped pages.  Requires
+     * completing the refcounting stuff and possibly introducing the notion
+     * of a FileMap hierarchy.
      */
-    bool create(const char* origFileName, int fd,
-                off64_t offset, size_t length, bool readOnly);
+    class FileMap {
+    public:
+        FileMap(void);
 
-    /*
-     * Return the name of the file this map came from, if known.
-     */
-    const char* getFileName(void) const { return mFileName; }
-    
-    /*
-     * Get a pointer to the piece of the file we requested.
-     */
-    void* getDataPtr(void) const { return mDataPtr; }
+        /*
+         * Create a new mapping on an open file.
+         *
+         * Closing the file descriptor does not unmap the pages, so we don't
+         * claim ownership of the fd.
+         *
+         * Returns "false" on failure.
+         */
+        bool create(const char *origFileName, int fd,
+                    off64_t offset, size_t length, bool readOnly);
 
-    /*
-     * Get the length we requested.
-     */
-    size_t getDataLength(void) const { return mDataLength; }
+        /*
+         * Return the name of the file this map came from, if known.
+         */
+        const char *getFileName(void) const {
+            return mFileName;
+        }
 
-    /*
-     * Get the data offset used to create this map.
-     */
-    off64_t getDataOffset(void) const { return mDataOffset; }
+        /*
+         * Get a pointer to the piece of the file we requested.
+         */
+        void *getDataPtr(void) const {
+            return mDataPtr;
+        }
 
-    /*
-     * Get a "copy" of the object.
-     */
-    FileMap* acquire(void) { mRefCount++; return this; }
+        /*
+         * Get the length we requested.
+         */
+        size_t getDataLength(void) const {
+            return mDataLength;
+        }
 
-    /*
-     * Call this when mapping is no longer needed.
-     */
-    void release(void) {
-        if (--mRefCount <= 0)
-            delete this;
-    }
+        /*
+         * Get the data offset used to create this map.
+         */
+        off64_t getDataOffset(void) const {
+            return mDataOffset;
+        }
 
-    /*
-     * This maps directly to madvise() values, but allows us to avoid
-     * including <sys/mman.h> everywhere.
-     */
-    enum MapAdvice {
-        NORMAL, RANDOM, SEQUENTIAL, WILLNEED, DONTNEED
-    };
+        /*
+         * Get a "copy" of the object.
+         */
+        FileMap *acquire(void) {
+            mRefCount++;
+            return this;
+        }
 
-    /*
-     * Apply an madvise() call to the entire file.
-     *
-     * Returns 0 on success, -1 on failure.
-     */
-    int advise(MapAdvice advice);
+        /*
+         * Call this when mapping is no longer needed.
+         */
+        void release(void) {
+            if (--mRefCount <= 0)
+                delete this;
+        }
 
-protected:
-    // don't delete objects; call release()
-    ~FileMap(void);
+        /*
+         * This maps directly to madvise() values, but allows us to avoid
+         * including <sys/mman.h> everywhere.
+         */
+        enum MapAdvice {
+            NORMAL, RANDOM, SEQUENTIAL, WILLNEED, DONTNEED
+        };
 
-private:
-    // these are not implemented
-    FileMap(const FileMap& src);
-    const FileMap& operator=(const FileMap& src);
+        /*
+         * Apply an madvise() call to the entire file.
+         *
+         * Returns 0 on success, -1 on failure.
+         */
+        int advise(MapAdvice advice);
 
-    int         mRefCount;      // reference count
-    char*       mFileName;      // original file name, if known
-    void*       mBasePtr;       // base of mmap area; page aligned
-    size_t      mBaseLength;    // length, measured from "mBasePtr"
-    off64_t     mDataOffset;    // offset used when map was created
-    void*       mDataPtr;       // start of requested data, offset from base
-    size_t      mDataLength;    // length, measured from "mDataPtr"
+    protected:
+        // don't delete objects; call release()
+        ~FileMap(void);
+
+    private:
+        // these are not implemented
+        FileMap(const FileMap &src);
+        const FileMap &operator=(const FileMap &src);
+
+        int         mRefCount;      // reference count
+        char       *mFileName;      // original file name, if known
+        void       *mBasePtr;       // base of mmap area; page aligned
+        size_t      mBaseLength;    // length, measured from "mBasePtr"
+        off64_t     mDataOffset;    // offset used when map was created
+        void       *mDataPtr;       // start of requested data, offset from base
+        size_t      mDataLength;    // length, measured from "mDataPtr"
 #ifdef HAVE_WIN32_FILEMAP
-    HANDLE      mFileHandle;    // Win32 file handle
-    HANDLE      mFileMapping;   // Win32 file mapping handle
+        HANDLE      mFileHandle;    // Win32 file handle
+        HANDLE      mFileMapping;   // Win32 file mapping handle
 #endif
 
-    static long mPageSize;
-};
+        static long mPageSize;
+    };
 
 }; // namespace android
 

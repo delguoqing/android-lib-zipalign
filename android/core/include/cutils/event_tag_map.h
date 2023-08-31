@@ -31,17 +31,17 @@ typedef struct EventTagMap EventTagMap;
  *
  * Returns NULL on failure.
  */
-EventTagMap* android_openEventTagMap(const char* fileName);
+EventTagMap *android_openEventTagMap(const char *fileName);
 
 /*
  * Close the map.
  */
-void android_closeEventTagMap(EventTagMap* map);
+void android_closeEventTagMap(EventTagMap *map);
 
 /*
  * Look up a tag by index.  Returns the tag string, or NULL if not found.
  */
-const char* android_lookupEventTag(const EventTagMap* map, int tag);
+const char *android_lookupEventTag(const EventTagMap *map, int tag);
 
 #ifdef __cplusplus
 }

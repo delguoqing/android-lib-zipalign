@@ -21,12 +21,14 @@
 
 namespace  android {
 
-class Functor {
-public:
-    Functor() {}
-    virtual ~Functor() {}
-    virtual status_t operator ()(int what, void* data) { return NO_ERROR; }
-};
+    class Functor {
+    public:
+        Functor() {}
+        virtual ~Functor() {}
+        virtual status_t operator ()(int what, void *data) {
+            return NO_ERROR;
+        }
+    };
 
 }; // namespace android
 

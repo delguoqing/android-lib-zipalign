@@ -75,15 +75,15 @@ struct asocket *asocket_init(int fd);
  * Other semantics are identical to the regular syscalls.
  */
 int asocket_connect(struct asocket *s, const struct sockaddr *addr,
-        socklen_t addrlen, int timeout);
+                    socklen_t addrlen, int timeout);
 
 int asocket_accept(struct asocket *s, struct sockaddr *addr,
-        socklen_t *addrlen, int timeout);
+                   socklen_t *addrlen, int timeout);
 
 int asocket_read(struct asocket *s, void *buf, size_t count, int timeout);
 
 int asocket_write(struct asocket *s, const void *buf, size_t count,
-        int timeout);
+                  int timeout);
 
 /* Abort above calls and shutdown socket.
  * Further I/O operations on this socket will immediately fail after this call.

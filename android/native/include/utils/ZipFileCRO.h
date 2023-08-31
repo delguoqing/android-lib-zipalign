@@ -33,24 +33,24 @@ extern "C" {
 /*
  * Trivial typedef to ensure that ZipFileCRO is not treated as a simple integer.
  */
-typedef void* ZipFileCRO;
+typedef void *ZipFileCRO;
 
 /*
  * Trivial typedef to ensure that ZipEntryCRO is not treated as a simple
  * integer.  We use NULL to indicate an invalid value.
  */
-typedef void* ZipEntryCRO;
+typedef void *ZipEntryCRO;
 
-extern ZipFileCRO ZipFileXRO_open(const char* path);
+extern ZipFileCRO ZipFileXRO_open(const char *path);
 
 extern void ZipFileCRO_destroy(ZipFileCRO zip);
 
 extern ZipEntryCRO ZipFileCRO_findEntryByName(ZipFileCRO zip,
-        const char* fileName);
+        const char *fileName);
 
 extern bool ZipFileCRO_getEntryInfo(ZipFileCRO zip, ZipEntryCRO entry,
-        int* pMethod, size_t* pUncompLen,
-        size_t* pCompLen, off64_t* pOffset, long* pModWhen, long* pCrc32);
+                                    int *pMethod, size_t *pUncompLen,
+                                    size_t *pCompLen, off64_t *pOffset, long *pModWhen, long *pCrc32);
 
 extern bool ZipFileCRO_uncompressEntry(ZipFileCRO zip, ZipEntryCRO entry, int fd);
 

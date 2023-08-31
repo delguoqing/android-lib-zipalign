@@ -23,8 +23,8 @@
 extern "C" {
 #endif
 
-time_t mktime_tz(struct tm * const tmp, char const * tz);
-void localtime_tz(const time_t * const timep, struct tm * tmp, const char* tz);
+time_t mktime_tz(struct tm *const tmp, char const *tz);
+void localtime_tz(const time_t *const timep, struct tm *tmp, const char *tz);
 
 #ifndef HAVE_ANDROID_OS
 /* the following is defined in <time.h> in Bionic */
@@ -51,5 +51,5 @@ size_t strftime_tz(char *s, size_t max, const char *format, const struct tm *tm,
 }
 #endif
 
-#endif /* __CUTILS_TZTIME_H */ 
+#endif /* __CUTILS_TZTIME_H */
 

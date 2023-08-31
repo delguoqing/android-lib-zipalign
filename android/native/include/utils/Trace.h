@@ -84,111 +84,111 @@
 
 namespace android {
 
-class Tracer {
+    class Tracer {
 
-public:
+    public:
 
-    static uint64_t getEnabledTags() {
-        initIfNeeded();
-        return sEnabledTags;
-    }
-
-    static inline bool isTagEnabled(uint64_t tag) {
-        initIfNeeded();
-        return sEnabledTags & tag;
-    }
-
-    static inline void traceCounter(uint64_t tag, const char* name,
-            int32_t value) {
-        if (CC_UNLIKELY(isTagEnabled(tag))) {
-            char buf[1024];
-            snprintf(buf, 1024, "C|%d|%s|%d", getpid(), name, value);
-            write(sTraceFD, buf, strlen(buf));
+        static uint64_t getEnabledTags() {
+            initIfNeeded();
+            return sEnabledTags;
         }
-    }
 
-    static inline void traceBegin(uint64_t tag, const char* name) {
-        if (CC_UNLIKELY(isTagEnabled(tag))) {
-            char buf[1024];
-            size_t len = snprintf(buf, 1024, "B|%d|%s", getpid(), name);
-            write(sTraceFD, buf, len);
+        static inline bool isTagEnabled(uint64_t tag) {
+            initIfNeeded();
+            return sEnabledTags & tag;
         }
-    }
 
-   static inline void traceEnd(uint64_t tag) {
-        if (CC_UNLIKELY(isTagEnabled(tag))) {
-            char buf = 'E';
-            write(sTraceFD, &buf, 1);
+        static inline void traceCounter(uint64_t tag, const char *name,
+                                        int32_t value) {
+            if (CC_UNLIKELY(isTagEnabled(tag))) {
+                char buf[1024];
+                snprintf(buf, 1024, "C|%d|%s|%d", getpid(), name, value);
+                write(sTraceFD, buf, strlen(buf));
+            }
         }
-    }
 
-private:
-
-    static inline void initIfNeeded() {
-        if (!android_atomic_acquire_load(&sIsReady)) {
-            init();
+        static inline void traceBegin(uint64_t tag, const char *name) {
+            if (CC_UNLIKELY(isTagEnabled(tag))) {
+                char buf[1024];
+                size_t len = snprintf(buf, 1024, "B|%d|%s", getpid(), name);
+                write(sTraceFD, buf, len);
+            }
         }
-    }
 
-    static void changeCallback();
+        static inline void traceEnd(uint64_t tag) {
+            if (CC_UNLIKELY(isTagEnabled(tag))) {
+                char buf = 'E';
+                write(sTraceFD, &buf, 1);
+            }
+        }
 
-    // init opens the trace marker file for writing and reads the
-    // atrace.tags.enableflags system property.  It does this only the first
-    // time it is run, using sMutex for synchronization.
-    static void init();
+    private:
 
-    // retrieve the current value of the system property.
-    static void loadSystemProperty();
+        static inline void initIfNeeded() {
+            if (!android_atomic_acquire_load(&sIsReady)) {
+                init();
+            }
+        }
 
-    // sIsReady is a boolean value indicating whether a call to init() has
-    // completed in this process.  It is initialized to 0 and set to 1 when the
-    // first init() call completes.  It is set to 1 even if a failure occurred
-    // in init (e.g. the trace marker file couldn't be opened).
-    //
-    // This should be checked by all tracing functions using an atomic acquire
-    // load operation before calling init().  This check avoids the need to lock
-    // a mutex each time a trace function gets called.
-    static volatile int32_t sIsReady;
+        static void changeCallback();
 
-    // sTraceFD is the file descriptor used to write to the kernel's trace
-    // buffer.  It is initialized to -1 and set to an open file descriptor in
-    // init() while a lock on sMutex is held.
-    //
-    // This should only be used by a trace function after init() has
-    // successfully completed.
-    static int sTraceFD;
+        // init opens the trace marker file for writing and reads the
+        // atrace.tags.enableflags system property.  It does this only the first
+        // time it is run, using sMutex for synchronization.
+        static void init();
 
-    // sEnabledTags is the set of tag bits for which tracing is currently
-    // enabled.  It is initialized to 0 and set based on the
-    // atrace.tags.enableflags system property in init() while a lock on sMutex
-    // is held.
-    //
-    // This should only be used by a trace function after init() has
-    // successfully completed.
-    //
-    // This value is only ever non-zero when tracing is initialized and sTraceFD is not -1.
-    static uint64_t sEnabledTags;
+        // retrieve the current value of the system property.
+        static void loadSystemProperty();
 
-    // sMutex is used to protect the execution of init().
-    static Mutex sMutex;
-};
+        // sIsReady is a boolean value indicating whether a call to init() has
+        // completed in this process.  It is initialized to 0 and set to 1 when the
+        // first init() call completes.  It is set to 1 even if a failure occurred
+        // in init (e.g. the trace marker file couldn't be opened).
+        //
+        // This should be checked by all tracing functions using an atomic acquire
+        // load operation before calling init().  This check avoids the need to lock
+        // a mutex each time a trace function gets called.
+        static volatile int32_t sIsReady;
 
-class ScopedTrace {
+        // sTraceFD is the file descriptor used to write to the kernel's trace
+        // buffer.  It is initialized to -1 and set to an open file descriptor in
+        // init() while a lock on sMutex is held.
+        //
+        // This should only be used by a trace function after init() has
+        // successfully completed.
+        static int sTraceFD;
 
-public:
-    inline ScopedTrace(uint64_t tag, const char* name) :
+        // sEnabledTags is the set of tag bits for which tracing is currently
+        // enabled.  It is initialized to 0 and set based on the
+        // atrace.tags.enableflags system property in init() while a lock on sMutex
+        // is held.
+        //
+        // This should only be used by a trace function after init() has
+        // successfully completed.
+        //
+        // This value is only ever non-zero when tracing is initialized and sTraceFD is not -1.
+        static uint64_t sEnabledTags;
+
+        // sMutex is used to protect the execution of init().
+        static Mutex sMutex;
+    };
+
+    class ScopedTrace {
+
+    public:
+        inline ScopedTrace(uint64_t tag, const char *name) :
             mTag(tag) {
-        Tracer::traceBegin(mTag, name);
-    }
+            Tracer::traceBegin(mTag, name);
+        }
 
-    inline ~ScopedTrace() {
-        Tracer::traceEnd(mTag);
-    }
+        inline ~ScopedTrace() {
+            Tracer::traceEnd(mTag);
+        }
 
-private:
+    private:
 
-    uint64_t mTag;
-};
+        uint64_t mTag;
+    };
 
 }; // namespace android
 

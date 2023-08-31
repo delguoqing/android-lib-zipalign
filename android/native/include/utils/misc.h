@@ -30,29 +30,29 @@
 
 namespace android {
 
-/*
- * Some utility functions for working with files.  These could be made
- * part of a "File" class.
- */
-typedef enum FileType {
-    kFileTypeUnknown = 0,
-    kFileTypeNonexistent,       // i.e. ENOENT
-    kFileTypeRegular,
-    kFileTypeDirectory,
-    kFileTypeCharDev,
-    kFileTypeBlockDev,
-    kFileTypeFifo,
-    kFileTypeSymlink,
-    kFileTypeSocket,
-} FileType;
-/* get the file's type; follows symlinks */
-FileType getFileType(const char* fileName);
-/* get the file's modification date; returns -1 w/errno set on failure */
-time_t getFileModDate(const char* fileName);
+    /*
+     * Some utility functions for working with files.  These could be made
+     * part of a "File" class.
+     */
+    typedef enum FileType {
+        kFileTypeUnknown = 0,
+        kFileTypeNonexistent,       // i.e. ENOENT
+        kFileTypeRegular,
+        kFileTypeDirectory,
+        kFileTypeCharDev,
+        kFileTypeBlockDev,
+        kFileTypeFifo,
+        kFileTypeSymlink,
+        kFileTypeSocket,
+    } FileType;
+    /* get the file's type; follows symlinks */
+    FileType getFileType(const char *fileName);
+    /* get the file's modification date; returns -1 w/errno set on failure */
+    time_t getFileModDate(const char *fileName);
 
-typedef void (*sysprop_change_callback)(void);
-void add_sysprop_change_callback(sysprop_change_callback cb, int priority);
-void report_sysprop_change();
+    typedef void (*sysprop_change_callback)(void);
+    void add_sysprop_change_callback(sysprop_change_callback cb, int priority);
+    void report_sysprop_change();
 
 }; // namespace android
 

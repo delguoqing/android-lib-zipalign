@@ -31,37 +31,37 @@ extern "C" {
 typedef struct Array Array;
 
 /** Constructs a new array. Returns NULL if we ran out of memory. */
-Array* arrayCreate();
+Array *arrayCreate();
 
 /** Frees an array. Does not free elements themselves. */
-void arrayFree(Array* array);
+void arrayFree(Array *array);
 
 /** Adds a pointer. Returns 0 is successful, < 0 otherwise. */
-int arrayAdd(Array* array, void* pointer);
+int arrayAdd(Array *array, void *pointer);
 
 /** Gets the pointer at the specified index. */
-void* arrayGet(Array* array, int index);
+void *arrayGet(Array *array, int index);
 
 /** Removes the pointer at the given index and returns it. */
-void* arrayRemove(Array* array, int index);
+void *arrayRemove(Array *array, int index);
 
 /** Sets pointer at the given index. Returns old pointer. */
-void* arraySet(Array* array, int index, void* pointer);
+void *arraySet(Array *array, int index, void *pointer);
 
 /** Sets the array size. Sets new pointers to NULL. Returns 0 if successful, < 0 otherwise . */
-int arraySetSize(Array* array, int size);
+int arraySetSize(Array *array, int size);
 
 /** Returns the size of the given array. */
-int arraySize(Array* array);
+int arraySize(Array *array);
 
-/** 
- * Returns a pointer to a C-style array which will be valid until this array 
+/**
+ * Returns a pointer to a C-style array which will be valid until this array
  * changes.
  */
-const void** arrayUnwrap(Array* array);
+const void **arrayUnwrap(Array *array);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __ARRAY_H */ 
+#endif /* __ARRAY_H */

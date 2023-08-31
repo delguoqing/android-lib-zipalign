@@ -19,8 +19,7 @@
 
 #include <stddef.h>
 
-struct listnode
-{
+struct listnode {
     struct listnode *next;
     struct listnode *prev;
 };

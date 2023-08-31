@@ -46,24 +46,24 @@ typedef struct AndroidLogEntry_t {
     android_LogPriority priority;
     pid_t pid;
     pthread_t tid;
-    const char * tag;
+    const char *tag;
     size_t messageLen;
-    const char * message;
+    const char *message;
 } AndroidLogEntry;
 
 AndroidLogFormat *android_log_format_new();
 
 void android_log_format_free(AndroidLogFormat *p_format);
 
-void android_log_setPrintFormat(AndroidLogFormat *p_format, 
-        AndroidLogPrintFormat format);
+void android_log_setPrintFormat(AndroidLogFormat *p_format,
+                                AndroidLogPrintFormat format);
 
 /**
  * Returns FORMAT_OFF on invalid string
  */
 AndroidLogPrintFormat android_log_formatFromString(const char *s);
 
-/** 
+/**
  * filterExpression: a single filter expression
  * eg "AT:d"
  *
@@ -73,12 +73,12 @@ AndroidLogPrintFormat android_log_formatFromString(const char *s);
  *
  */
 
-int android_log_addFilterRule(AndroidLogFormat *p_format, 
-        const char *filterExpression);
+int android_log_addFilterRule(AndroidLogFormat *p_format,
+                              const char *filterExpression);
 
 
-/** 
- * filterString: a whitespace-separated set of filter expressions 
+/**
+ * filterString: a whitespace-separated set of filter expressions
  * eg "AT:d *:i"
  *
  * returns 0 on success and -1 on invalid expression
@@ -88,15 +88,15 @@ int android_log_addFilterRule(AndroidLogFormat *p_format,
  */
 
 int android_log_addFilterString(AndroidLogFormat *p_format,
-        const char *filterString);
+                                const char *filterString);
 
 
-/** 
+/**
  * returns 1 if this log line should be printed based on its priority
  * and tag, and 0 if it should not
  */
 int android_log_shouldPrintLine (
-        AndroidLogFormat *p_format, const char *tag, android_LogPriority pri);
+    AndroidLogFormat *p_format, const char *tag, android_LogPriority pri);
 
 
 /**
@@ -116,8 +116,8 @@ int android_log_processLogBuffer(struct logger_entry *buf,
  * into a string.
  */
 int android_log_processBinaryLogBuffer(struct logger_entry *buf,
-    AndroidLogEntry *entry, const EventTagMap* map, char* messageBuf,
-    int messageBufLen);
+                                       AndroidLogEntry *entry, const EventTagMap *map, char *messageBuf,
+                                       int messageBufLen);
 
 
 /**
@@ -128,7 +128,7 @@ int android_log_processBinaryLogBuffer(struct logger_entry *buf,
  * Returns NULL on malloc error
  */
 
-char *android_log_formatLogLine (    
+char *android_log_formatLogLine (
     AndroidLogFormat *p_format,
     char *defaultBuffer,
     size_t defaultBufferSize,

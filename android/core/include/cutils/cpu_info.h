@@ -21,14 +21,14 @@
 extern "C" {
 #endif
 
-/* returns a string contiaining an ASCII representation of the CPU serial number, 
+/* returns a string contiaining an ASCII representation of the CPU serial number,
 ** or NULL if cpu info not available.
 ** The string is a static variable, so don't call free() on it.
 */
-extern const char* get_cpu_serial_number(void);
-    
+extern const char *get_cpu_serial_number(void);
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __CUTILS_CPU_INFO_H */ 
+#endif /* __CUTILS_CPU_INFO_H */

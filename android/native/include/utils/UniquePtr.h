@@ -32,7 +32,7 @@ template <typename T>
 struct DefaultDelete {
     enum { type_must_be_complete = sizeof(T) };
     DefaultDelete() {}
-    void operator()(T* p) const {
+    void operator()(T *p) const {
         delete p;
     }
 };
@@ -41,7 +41,7 @@ struct DefaultDelete {
 template <typename T>
 struct DefaultDelete<T[]> {
     enum { type_must_be_complete = sizeof(T) };
-    void operator()(T* p) const {
+    void operator()(T *p) const {
         delete[] p;
     }
 };
@@ -58,7 +58,7 @@ template <typename T, typename D = DefaultDelete<T> >
 class UniquePtr {
 public:
     // Construct a new UniquePtr, taking ownership of the given raw pointer.
-    explicit UniquePtr(T* ptr = NULL) : mPtr(ptr) {
+    explicit UniquePtr(T *ptr = NULL) : mPtr(ptr) {
     }
 
     ~UniquePtr() {
@@ -66,14 +66,20 @@ public:
     }
 
     // Accessors.
-    T& operator*() const { return *mPtr; }
-    T* operator->() const { return mPtr; }
-    T* get() const { return mPtr; }
+    T &operator*() const {
+        return *mPtr;
+    }
+    T *operator->() const {
+        return mPtr;
+    }
+    T *get() const {
+        return mPtr;
+    }
 
     // Returns the raw pointer and hands over ownership to the caller.
     // The pointer will not be deleted by UniquePtr.
-    T* release() __attribute__((warn_unused_result)) {
-        T* result = mPtr;
+    T *release() __attribute__((warn_unused_result)) {
+        T *result = mPtr;
         mPtr = NULL;
         return result;
     }
@@ -81,7 +87,7 @@ public:
     // Takes ownership of the given raw pointer.
     // If this smart pointer previously owned a different raw pointer, that
     // raw pointer will be freed.
-    void reset(T* ptr = NULL) {
+    void reset(T *ptr = NULL) {
         if (ptr != mPtr) {
             D()(mPtr);
             mPtr = ptr;
@@ -90,15 +96,15 @@ public:
 
 private:
     // The raw pointer.
-    T* mPtr;
+    T *mPtr;
 
     // Comparing unique pointers is probably a mistake, since they're unique.
-    template <typename T2> bool operator==(const UniquePtr<T2>& p) const;
-    template <typename T2> bool operator!=(const UniquePtr<T2>& p) const;
+    template <typename T2> bool operator==(const UniquePtr<T2> &p) const;
+    template <typename T2> bool operator!=(const UniquePtr<T2> &p) const;
 
     // Disallow copy and assignment.
-    UniquePtr(const UniquePtr&);
-    void operator=(const UniquePtr&);
+    UniquePtr(const UniquePtr &);
+    void operator=(const UniquePtr &);
 };
 
 // Partial specialization for array types. Like std::unique_ptr, this removes
@@ -106,25 +112,27 @@ private:
 template <typename T, typename D>
 class UniquePtr<T[], D> {
 public:
-    explicit UniquePtr(T* ptr = NULL) : mPtr(ptr) {
+    explicit UniquePtr(T *ptr = NULL) : mPtr(ptr) {
     }
 
     ~UniquePtr() {
         reset();
     }
 
-    T& operator[](size_t i) const {
+    T &operator[](size_t i) const {
         return mPtr[i];
     }
-    T* get() const { return mPtr; }
+    T *get() const {
+        return mPtr;
+    }
 
-    T* release() __attribute__((warn_unused_result)) {
-        T* result = mPtr;
+    T *release() __attribute__((warn_unused_result)) {
+        T *result = mPtr;
         mPtr = NULL;
         return result;
     }
 
-    void reset(T* ptr = NULL) {
+    void reset(T *ptr = NULL) {
         if (ptr != mPtr) {
             D()(mPtr);
             mPtr = ptr;
@@ -132,11 +140,11 @@ public:
     }
 
 private:
-    T* mPtr;
+    T *mPtr;
 
     // Disallow copy and assignment.
-    UniquePtr(const UniquePtr&);
-    void operator=(const UniquePtr&);
+    UniquePtr(const UniquePtr &);
+    void operator=(const UniquePtr &);
 };
 
 #if UNIQUE_PTR_TESTS
@@ -155,19 +163,23 @@ static void assert(bool b) {
 }
 static int cCount = 0;
 struct C {
-    C() { ++cCount; }
-    ~C() { --cCount; }
+    C() {
+        ++cCount;
+    }
+    ~C() {
+        --cCount;
+    }
 };
 static bool freed = false;
 struct Freer {
-    void operator()(int* p) {
+    void operator()(int *p) {
         assert(*p == 123);
         free(p);
         freed = true;
     }
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     //
     // UniquePtr<T> tests...
     //
@@ -179,7 +191,7 @@ int main(int argc, char* argv[]) {
     }
     assert(cCount == 0);
     // Does release work?
-    C* rawC;
+    C *rawC;
     {
         UniquePtr<C> c(new C);
         assert(cCount == 1);
@@ -228,7 +240,7 @@ int main(int argc, char* argv[]) {
     //
     assert(!freed);
     {
-        UniquePtr<int, Freer> i(reinterpret_cast<int*>(malloc(sizeof(int))));
+        UniquePtr<int, Freer> i(reinterpret_cast<int *>(malloc(sizeof(int))));
         *i = 123;
     }
     assert(freed);

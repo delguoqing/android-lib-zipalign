@@ -62,7 +62,7 @@ extern "C" {
   p = mspace_malloc(msp, n);
   assert(mspace_usable_size(msp, p) >= 256);
 */
-size_t mspace_usable_size(mspace, const void*);
+size_t mspace_usable_size(mspace, const void *);
 
 #if USE_CONTIGUOUS_MSPACES
 /*
@@ -71,20 +71,20 @@ size_t mspace_usable_size(mspace, const void*);
   bytes is ever allocated to the mspace.
  */
 mspace create_contiguous_mspace(size_t starting_capacity, size_t max_capacity,
-    int locked);
+                                int locked);
 
 /*
    Identical to create_contiguous_mspace, but labels the mapping 'mspace/name'
    instead of 'mspace'
 */
 mspace create_contiguous_mspace_with_name(size_t starting_capacity,
-    size_t max_capacity, int locked, const char *name);
+        size_t max_capacity, int locked, const char *name);
 
 /*
    Identical to create_contiguous_mspace, but uses previously mapped memory.
 */
 mspace create_contiguous_mspace_with_base(size_t starting_capacity,
-    size_t max_capacity, int locked, void *base);
+        size_t max_capacity, int locked, void *base);
 
 size_t destroy_contiguous_mspace(mspace msp);
 
@@ -104,8 +104,8 @@ void *contiguous_mspace_sbrk0(mspace msp);
   it is >= the requested size.
  */
 void mspace_walk_heap(mspace msp,
-    void(*handler)(const void *chunkptr, size_t chunklen,
-        const void *userptr, size_t userlen, void *arg), void *harg);
+                      void(*handler)(const void *chunkptr, size_t chunklen,
+                                     const void *userptr, size_t userlen, void *arg), void *harg);
 
 /*
   mspace_walk_free_pages(handler, harg)
@@ -119,7 +119,7 @@ void mspace_walk_heap(mspace msp,
   The value in harg will be passed to each call of the handler.
  */
 void mspace_walk_free_pages(mspace msp,
-    void(*handler)(void *start, void *end, void *arg), void *harg);
+                            void(*handler)(void *start, void *end, void *arg), void *harg);
 
 #ifdef __cplusplus
 };  /* end of extern "C" */

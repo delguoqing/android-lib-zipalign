@@ -33,4 +33,4 @@ extern int get_sched_policy(int tid, SchedPolicy *policy);
 }
 #endif
 
-#endif /* __CUTILS_SCHED_POLICY_H */ 
+#endif /* __CUTILS_SCHED_POLICY_H */

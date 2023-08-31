@@ -32,209 +32,186 @@ extern "C" {
 
 namespace android {
 
-// ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
 
-class String8;
-class TextOutput;
+    class String8;
+    class TextOutput;
 
-//! This is a string holding UTF-16 characters.
-class String16
-{
-public:
-                                String16();
-                                String16(const String16& o);
-                                String16(const String16& o,
-                                         size_t len,
-                                         size_t begin=0);
-    explicit                    String16(const char16_t* o);
-    explicit                    String16(const char16_t* o, size_t len);
-    explicit                    String16(const String8& o);
-    explicit                    String16(const char* o);
-    explicit                    String16(const char* o, size_t len);
+    //! This is a string holding UTF-16 characters.
+    class String16 {
+    public:
+        String16();
+        String16(const String16 &o);
+        String16(const String16 &o,
+                 size_t len,
+                 size_t begin = 0);
+        explicit                    String16(const char16_t *o);
+        explicit                    String16(const char16_t *o, size_t len);
+        explicit                    String16(const String8 &o);
+        explicit                    String16(const char *o);
+        explicit                    String16(const char *o, size_t len);
 
-                                ~String16();
-    
-    inline  const char16_t*     string() const;
-    inline  size_t              size() const;
-    
-    inline  const SharedBuffer* sharedBuffer() const;
-    
-            void                setTo(const String16& other);
-            status_t            setTo(const char16_t* other);
-            status_t            setTo(const char16_t* other, size_t len);
-            status_t            setTo(const String16& other,
-                                      size_t len,
-                                      size_t begin=0);
-    
-            status_t            append(const String16& other);
-            status_t            append(const char16_t* other, size_t len);
-            
-    inline  String16&           operator=(const String16& other);
-    
-    inline  String16&           operator+=(const String16& other);
-    inline  String16            operator+(const String16& other) const;
+        ~String16();
 
-            status_t            insert(size_t pos, const char16_t* chrs);
-            status_t            insert(size_t pos,
-                                       const char16_t* chrs, size_t len);
+        inline  const char16_t     *string() const;
+        inline  size_t              size() const;
 
-            ssize_t             findFirst(char16_t c) const;
-            ssize_t             findLast(char16_t c) const;
+        inline  const SharedBuffer *sharedBuffer() const;
 
-            bool                startsWith(const String16& prefix) const;
-            bool                startsWith(const char16_t* prefix) const;
-            
-            status_t            makeLower();
+        void                setTo(const String16 &other);
+        status_t            setTo(const char16_t *other);
+        status_t            setTo(const char16_t *other, size_t len);
+        status_t            setTo(const String16 &other,
+                                  size_t len,
+                                  size_t begin = 0);
 
-            status_t            replaceAll(char16_t replaceThis,
-                                           char16_t withThis);
+        status_t            append(const String16 &other);
+        status_t            append(const char16_t *other, size_t len);
 
-            status_t            remove(size_t len, size_t begin=0);
+        inline  String16           &operator=(const String16 &other);
 
-    inline  int                 compare(const String16& other) const;
+        inline  String16           &operator+=(const String16 &other);
+        inline  String16            operator+(const String16 &other) const;
 
-    inline  bool                operator<(const String16& other) const;
-    inline  bool                operator<=(const String16& other) const;
-    inline  bool                operator==(const String16& other) const;
-    inline  bool                operator!=(const String16& other) const;
-    inline  bool                operator>=(const String16& other) const;
-    inline  bool                operator>(const String16& other) const;
-    
-    inline  bool                operator<(const char16_t* other) const;
-    inline  bool                operator<=(const char16_t* other) const;
-    inline  bool                operator==(const char16_t* other) const;
-    inline  bool                operator!=(const char16_t* other) const;
-    inline  bool                operator>=(const char16_t* other) const;
-    inline  bool                operator>(const char16_t* other) const;
-    
-    inline                      operator const char16_t*() const;
-    
-private:
-            const char16_t*     mString;
-};
+        status_t            insert(size_t pos, const char16_t *chrs);
+        status_t            insert(size_t pos,
+                                   const char16_t *chrs, size_t len);
 
-// String16 can be trivially moved using memcpy() because moving does not
-// require any change to the underlying SharedBuffer contents or reference count.
-ANDROID_TRIVIAL_MOVE_TRAIT(String16)
+        ssize_t             findFirst(char16_t c) const;
+        ssize_t             findLast(char16_t c) const;
 
-TextOutput& operator<<(TextOutput& to, const String16& val);
+        bool                startsWith(const String16 &prefix) const;
+        bool                startsWith(const char16_t *prefix) const;
 
-// ---------------------------------------------------------------------------
-// No user servicable parts below.
+        status_t            makeLower();
 
-inline int compare_type(const String16& lhs, const String16& rhs)
-{
-    return lhs.compare(rhs);
-}
+        status_t            replaceAll(char16_t replaceThis,
+                                       char16_t withThis);
 
-inline int strictly_order_type(const String16& lhs, const String16& rhs)
-{
-    return compare_type(lhs, rhs) < 0;
-}
+        status_t            remove(size_t len, size_t begin = 0);
 
-inline const char16_t* String16::string() const
-{
-    return mString;
-}
+        inline  int                 compare(const String16 &other) const;
 
-inline size_t String16::size() const
-{
-    return SharedBuffer::sizeFromData(mString)/sizeof(char16_t)-1;
-}
+        inline  bool                operator<(const String16 &other) const;
+        inline  bool                operator<=(const String16 &other) const;
+        inline  bool                operator==(const String16 &other) const;
+        inline  bool                operator!=(const String16 &other) const;
+        inline  bool                operator>=(const String16 &other) const;
+        inline  bool                operator>(const String16 &other) const;
 
-inline const SharedBuffer* String16::sharedBuffer() const
-{
-    return SharedBuffer::bufferFromData(mString);
-}
+        inline  bool                operator<(const char16_t *other) const;
+        inline  bool                operator<=(const char16_t *other) const;
+        inline  bool                operator==(const char16_t *other) const;
+        inline  bool                operator!=(const char16_t *other) const;
+        inline  bool                operator>=(const char16_t *other) const;
+        inline  bool                operator>(const char16_t *other) const;
 
-inline String16& String16::operator=(const String16& other)
-{
-    setTo(other);
-    return *this;
-}
+        inline                      operator const char16_t *() const;
 
-inline String16& String16::operator+=(const String16& other)
-{
-    append(other);
-    return *this;
-}
+    private:
+        const char16_t     *mString;
+    };
 
-inline String16 String16::operator+(const String16& other) const
-{
-    String16 tmp(*this);
-    tmp += other;
-    return tmp;
-}
+    // String16 can be trivially moved using memcpy() because moving does not
+    // require any change to the underlying SharedBuffer contents or reference count.
+    ANDROID_TRIVIAL_MOVE_TRAIT(String16)
 
-inline int String16::compare(const String16& other) const
-{
-    return strzcmp16(mString, size(), other.mString, other.size());
-}
+    TextOutput &operator<<(TextOutput &to, const String16 &val);
 
-inline bool String16::operator<(const String16& other) const
-{
-    return strzcmp16(mString, size(), other.mString, other.size()) < 0;
-}
+    // ---------------------------------------------------------------------------
+    // No user servicable parts below.
 
-inline bool String16::operator<=(const String16& other) const
-{
-    return strzcmp16(mString, size(), other.mString, other.size()) <= 0;
-}
+    inline int compare_type(const String16 &lhs, const String16 &rhs) {
+        return lhs.compare(rhs);
+    }
 
-inline bool String16::operator==(const String16& other) const
-{
-    return strzcmp16(mString, size(), other.mString, other.size()) == 0;
-}
+    inline int strictly_order_type(const String16 &lhs, const String16 &rhs) {
+        return compare_type(lhs, rhs) < 0;
+    }
 
-inline bool String16::operator!=(const String16& other) const
-{
-    return strzcmp16(mString, size(), other.mString, other.size()) != 0;
-}
+    inline const char16_t *String16::string() const {
+        return mString;
+    }
 
-inline bool String16::operator>=(const String16& other) const
-{
-    return strzcmp16(mString, size(), other.mString, other.size()) >= 0;
-}
+    inline size_t String16::size() const {
+        return SharedBuffer::sizeFromData(mString) / sizeof(char16_t) - 1;
+    }
 
-inline bool String16::operator>(const String16& other) const
-{
-    return strzcmp16(mString, size(), other.mString, other.size()) > 0;
-}
+    inline const SharedBuffer *String16::sharedBuffer() const {
+        return SharedBuffer::bufferFromData(mString);
+    }
 
-inline bool String16::operator<(const char16_t* other) const
-{
-    return strcmp16(mString, other) < 0;
-}
+    inline String16 &String16::operator=(const String16 &other) {
+        setTo(other);
+        return *this;
+    }
 
-inline bool String16::operator<=(const char16_t* other) const
-{
-    return strcmp16(mString, other) <= 0;
-}
+    inline String16 &String16::operator+=(const String16 &other) {
+        append(other);
+        return *this;
+    }
 
-inline bool String16::operator==(const char16_t* other) const
-{
-    return strcmp16(mString, other) == 0;
-}
+    inline String16 String16::operator+(const String16 &other) const {
+        String16 tmp(*this);
+        tmp += other;
+        return tmp;
+    }
 
-inline bool String16::operator!=(const char16_t* other) const
-{
-    return strcmp16(mString, other) != 0;
-}
+    inline int String16::compare(const String16 &other) const {
+        return strzcmp16(mString, size(), other.mString, other.size());
+    }
 
-inline bool String16::operator>=(const char16_t* other) const
-{
-    return strcmp16(mString, other) >= 0;
-}
+    inline bool String16::operator<(const String16 &other) const {
+        return strzcmp16(mString, size(), other.mString, other.size()) < 0;
+    }
 
-inline bool String16::operator>(const char16_t* other) const
-{
-    return strcmp16(mString, other) > 0;
-}
+    inline bool String16::operator<=(const String16 &other) const {
+        return strzcmp16(mString, size(), other.mString, other.size()) <= 0;
+    }
 
-inline String16::operator const char16_t*() const
-{
-    return mString;
-}
+    inline bool String16::operator==(const String16 &other) const {
+        return strzcmp16(mString, size(), other.mString, other.size()) == 0;
+    }
+
+    inline bool String16::operator!=(const String16 &other) const {
+        return strzcmp16(mString, size(), other.mString, other.size()) != 0;
+    }
+
+    inline bool String16::operator>=(const String16 &other) const {
+        return strzcmp16(mString, size(), other.mString, other.size()) >= 0;
+    }
+
+    inline bool String16::operator>(const String16 &other) const {
+        return strzcmp16(mString, size(), other.mString, other.size()) > 0;
+    }
+
+    inline bool String16::operator<(const char16_t *other) const {
+        return strcmp16(mString, other) < 0;
+    }
+
+    inline bool String16::operator<=(const char16_t *other) const {
+        return strcmp16(mString, other) <= 0;
+    }
+
+    inline bool String16::operator==(const char16_t *other) const {
+        return strcmp16(mString, other) == 0;
+    }
+
+    inline bool String16::operator!=(const char16_t *other) const {
+        return strcmp16(mString, other) != 0;
+    }
+
+    inline bool String16::operator>=(const char16_t *other) const {
+        return strcmp16(mString, other) >= 0;
+    }
+
+    inline bool String16::operator>(const char16_t *other) const {
+        return strcmp16(mString, other) > 0;
+    }
+
+    inline String16::operator const char16_t *() const {
+        return mString;
+    }
 
 }; // namespace android
 

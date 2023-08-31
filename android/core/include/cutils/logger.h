@@ -1,5 +1,5 @@
 /* utils/logger.h
-** 
+**
 ** Copyright 2007, The Android Open Source Project
 **
 ** This file is dual licensed.  It may be redistributed and/or modified

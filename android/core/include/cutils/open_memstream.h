@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-FILE* open_memstream(char** bufp, size_t* sizep);
+FILE *open_memstream(char **bufp, size_t *sizep);
 
 #ifdef __cplusplus
 }

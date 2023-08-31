@@ -169,6 +169,8 @@ private:
     ZipFile(const ZipFile& src);
     ZipFile& operator=(const ZipFile& src);
 
+    status_t alignEntry(ZipEntry *pEntry, uint32_t alignTo);
+
     class EndOfCentralDir {
     public:
         EndOfCentralDir(void) :
