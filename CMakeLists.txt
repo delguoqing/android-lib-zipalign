@@ -24,6 +24,11 @@ add_definitions(-DOS_PATH_SEPARATOR=47) #ascii code for / (slash)
 add_definitions(-DHAVE_SYS_SOCKET_H=1)
 endif(UNIX)
 
+if(APPLE)
+add_definitions(-Doff64_t=off_t)
+add_definitions(-DHAVE_STRLCPY=1)
+endif(APPLE)
+
 #TODO any other platforms to handle?
 
 add_definitions(-DANDROID_SMP=1) #always needed? (Required by SharedBuffer.cpp/atomic.h)
